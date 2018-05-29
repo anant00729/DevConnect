@@ -1,9 +1,14 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const passport = require('passport') 
+const passportStrategy = require('./config/passport')
 const dbURI = require('./config/keys').mongoURI
+const bodyParser = require('body-parser')
 
 
-const users = require('./routes/api/users')
+
+
+const users = require('./routes/api/users/users')
 const profile = require('./routes/api/profile')
 const posts = require('./routes/api/posts')
 
@@ -12,6 +17,18 @@ const app = express()
 mongoose.connect(dbURI)
         .then(()=>console.log('successfully connected to mongo db'))
         .catch(err=>console.log(`error in DB connection : ${err.message}`))
+
+
+
+
+// body-parser middleware        
+app.use(bodyParser.urlencoded({extended:false}))
+app.use(bodyParser.json())
+
+// passport middleware 
+app.use(passport.initialize())
+// passport strategy
+passportStrategy(passport)
 
 
 // use routes 
