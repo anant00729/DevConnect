@@ -174,4 +174,35 @@ router.post('/comment/:id', passport.authenticate('jwt',{session : false}), asyn
 })
 
 
+router.delete('/comment/:id/:comment_id', passport.authenticate('jwt',{session : false}), async (req,res)=>{
+    
+    
+    try{
+        const post = await Post.findById(req.params.id).exec()
+        
+        if(post.comments.filter(comment => comment._id.toString() === req.params.comment_id).length === 0){
+
+            console.log('length :', post.comments.filter(comment => {
+                console.log('comment._id.toString() :', comment._id.toString());
+                console.log('req.params.comments_id :', req.params.comment_id);
+                comment._id.toString() === req.params.comment_id
+            }).length);
+
+
+            return res.status(404).json({errorMessage : 'Comment doent exists'})
+        }
+        const removeIndex = post.comments.map(item=>item._id.toString()).indexOf(req.params.comment_id)
+
+        post.comments.splice(removeIndex,1)
+        const savedPost = await post.save()
+        res.status(200).json(savedPost)
+        
+    }catch(error){
+        return res.status(404).json({errorMessage : 'Something went wrong while adding the comment to the post'})
+    }
+    
+
+})
+
+
 module.exports = router
