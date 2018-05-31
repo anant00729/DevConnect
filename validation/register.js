@@ -43,6 +43,7 @@ module.exports = function validateRegisterInput(data){
         err.password2 = 'Passwords must match'
     }
 
+
     return {
         errors : err,
         isValid : isEmpty(err)

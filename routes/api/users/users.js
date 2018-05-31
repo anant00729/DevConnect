@@ -23,7 +23,7 @@ router.get('/test', (req,res)=>{
 })
 
 router.post('/register',  async (req,res)=>{
-
+    console.log('WORKING')
     const { isValid , errors } = validateRegisterInput(req.body)
 
 
@@ -56,7 +56,7 @@ router.post('/register',  async (req,res)=>{
                 newUser.password = hash
                 try{
                     const createdUser = await newUser.save()
-                    res.json(createdUser)
+                    res.status(200).json(createdUser)
                 }catch(err){
                     console.log('err :', err.message);
                 }
