@@ -4,6 +4,7 @@ const passport = require('passport')
 const passportStrategy = require('./config/passport')
 const dbURI = require('./config/keys').mongoURI
 const bodyParser = require('body-parser')
+const cors = require('cors')
 
 
 
@@ -19,6 +20,8 @@ mongoose.connect(dbURI)
         .catch(err=>console.log(`error in DB connection : ${err.message}`))
 
 
+//cors
+app.use(cors())
 
 
 // body-parser middleware        
@@ -29,6 +32,17 @@ app.use(bodyParser.json())
 app.use(passport.initialize())
 // passport strategy
 passportStrategy(passport)
+
+//CORS
+// app.use((req,res,next)=>{
+//     res.header('Access-Control-Allow-Origin', '*')
+//     res.header('Access-Control-Allow-Header', 'Origin, X-Requested-With, Content-Type, Accept , Authorization')
+//     if(req.method === 'OPTIONS'){
+//         res.header('Access-Control-Allow-Methods', 'GET, POST, DELETE')
+//         return res.status(200).json({})
+//     }
+//     next()
+// })
 
 
 // use routes 

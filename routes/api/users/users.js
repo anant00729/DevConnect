@@ -23,9 +23,7 @@ router.get('/test', (req,res)=>{
 })
 
 router.post('/register',  async (req,res)=>{
-    console.log('WORKING')
     const { isValid , errors } = validateRegisterInput(req.body)
-
 
     // check validation
     if(!isValid){
@@ -84,6 +82,8 @@ router.post('/login', async (req,res)=>{
         return res.status(404).json({message : 'user email not found'})
     }
     //USER FOUND
+    console.log('password :', password);
+    console.log('userBoolean.password :', userBoolean.password);
     const isMatch = await bcrypt.compare(password, userBoolean.password)
 
     if(isMatch){
