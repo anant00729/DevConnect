@@ -79,7 +79,7 @@ router.post('/login', async (req,res)=>{
 
     const userBoolean = await UserMongo.findUserByEmail(req,true)
     if(!userBoolean){
-        return res.status(404).json({message : 'user email not found'})
+        return res.status(400).json({messageError :{email : 'user email not found'}})
     }
     //USER FOUND
     console.log('password :', password);
@@ -96,7 +96,8 @@ router.post('/login', async (req,res)=>{
             })
         })
     }else {
-        return res.status(400).json({message : 'FAILED password not matched, please try again'})
+        
+        return res.status(400).json({messageError :{password : 'password incorrect, please try again'}})
     }
     
 })
