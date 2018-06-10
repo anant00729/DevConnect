@@ -4,6 +4,7 @@ import  TextFieldGroup  from '../common/TextFieldGroup'
 import TextAreaFieldGroup from '../common/TextAreaFieldGroup'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
+import { addExperience } from '../../actions/profileActions'
 
 
 class AddExperience extends Component {
@@ -13,7 +14,7 @@ class AddExperience extends Component {
     this.state = {
       company : '',
       title : '',
-      jobTitle : '',
+      title : '',
       location : '',
       from : '',
       to : '',
@@ -24,14 +25,44 @@ class AddExperience extends Component {
     }
     this.onSubmit = this.onSubmit.bind(this)
     this.onChange = this.onChange.bind(this)
+    this.onCheck = this.onCheck.bind(this)
   }
 
-  onSubmit(){
-
+  onCheck(){
+    this.setState({
+      disabled : !this.state.disabled,
+      current : !this.state.current
+    }) 
+    console.log('this.state.disabled :', this.state.disabled);
+    console.log('this.state.current :', this.state.current);
+    
+  }
+  
+  componentWillReceiveProps(nextProps){
+    if(nextProps.errors){
+      this.setState({
+        errors : nextProps.errors
+      })
+    }
   }
 
-  onChange(){
+  onSubmit(e){
+    e.preventDefault()
+    const expData = {
+      company : this.state.company,
+      title : this.state.title,
+      location : this.state.location,
+      from : this.state.from,
+      to : this.state.to,
+      current : this.state.current,
+      description : this.state.description
+    }
 
+    this.props.addExperience(expData, this.props.history)
+  }
+
+  onChange(e){
+    this.setState({[e.target.name] : e.target.value})
   }
 
   render() {
@@ -59,14 +90,14 @@ class AddExperience extends Component {
                   />
                   <TextFieldGroup
                   placeholder="* job title"
-                  name="job title"
-                  value={this.state.jobTitle}
+                  name="title"
+                  value={this.state.title}
                   onChange = {this.onChange}
-                  error = {errors.jobTitle}
+                  error = {errors.title}
                   />
                   <TextFieldGroup
                   placeholder="* location"
-                  name="Location"
+                  name="location"
                   value={this.state.location}
                   onChange = {this.onChange}
                   error = {errors.location}
@@ -96,7 +127,7 @@ class AddExperience extends Component {
                     value={this.state.current}
                     checked={this.state.current}
                     onChange={this.onCheck}
-                    id="checked"
+                    id="current"
                     />
                     <label htmlFor="current" className="form-check-label">Curent Job</label>
                   </div>
@@ -120,7 +151,8 @@ class AddExperience extends Component {
 
 AddExperience.propTypes = {
   profile : PropTypes.object.isRequired,
-  errors : PropTypes.object.isRequired
+  errors : PropTypes.object.isRequired,
+  addExperience : PropTypes.func.isRequired
 }
 
 
@@ -128,5 +160,5 @@ const mapStateToProps = state => ({
   profile : state.profile,
   errors : state.errors
 })
-export default connect(mapStateToProps, { })(withRouter(AddExperience))
+export default connect(mapStateToProps, { addExperience })(withRouter(AddExperience))
 

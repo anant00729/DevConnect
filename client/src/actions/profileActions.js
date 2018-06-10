@@ -70,3 +70,38 @@ export const deleteAccount = () => dispatch => {
         })
     }
 }
+
+// add experience 
+export const addExperience = (expData, history) => async (dispatch) => {
+    try{
+        const data = await axios.post('/api/profile/experience',expData)
+        if(data){
+            history.push('/dashboard')
+        }
+    }catch(err){
+        dispatch({
+            type : GET_ERRORS,
+            payload : err.response.data
+        })
+    }
+    
+        
+}
+
+// add education
+export const addEducation = (eduData, history) => async (dispatch) => {
+    try{
+        const data = await axios.post('/api/profile/education',eduData)
+        if(data){
+            history.push('/dashboard')
+        }
+    }catch(err){
+        dispatch({
+            type : GET_ERRORS,
+            payload : err.response.data
+        })
+    }
+    
+        
+}
+
