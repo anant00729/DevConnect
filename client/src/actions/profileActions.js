@@ -3,7 +3,8 @@ import {
     GET_PROFILE,
     PROFILE_LOADING,
     CLEAR_CURRENT_PROFILE,
-    GET_ERRORS
+    GET_ERRORS,
+    SET_CURRENT_USER
 } from './types'
 
 //Get current profile
@@ -30,7 +31,7 @@ export const getCurrentProfile = () => async (dispatch) =>{
 // Create Profile
 export const createProfile = (profileData, history) => async (dispatch) => {
     try{
-        const data = await axios.post('/api/profile', profileData)
+        await axios.post('/api/profile', profileData)
         history.push('/dashboard')
     }catch(error){
         dispatch({
@@ -52,5 +53,20 @@ export const setProfileLoading = () => {
 export const clearCurrentProfile = () =>{
     return {
         type : CLEAR_CURRENT_PROFILE
+    }
+}
+
+export const deleteAccount = () => dispatch => {
+    if(window.confirm('Are you sure, this cannot be undone?')){
+        axios.delete('/api/profile')
+        .then(res=>dispatch({
+            type : SET_CURRENT_USER,
+            payload : {}
+        })).catch(err=>{
+            dispatch({
+                type : GET_ERRORS,
+                payload : err.response.data
+            })
+        })
     }
 }
